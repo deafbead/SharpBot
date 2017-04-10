@@ -24,21 +24,37 @@ namespace TelegramBot.Bot.Commands
 
         protected override async Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
         {
-            byte[] image;
-            try
+            byte[] image = await TryGetRandomCat(attempts: 10);
+            if (image == null)
             {
-                image = await GetRandomCatImage();
+                return new IReply[]
+                {
+                    new TextReply("Кажется, котобот сломался..."), 
+                };
             }
-            catch (WebException ex)
-            {
-                Logger.Log(ex);
-                return Nothing;
-            }
-
+            
             return new IReply[]
             {
                 new ImageReply(image, "Кто-то сказал " + FindCatWord(input.Message.Text) + "???")
             };
+        }
+
+        private async Task<byte[]> TryGetRandomCat(int attempts)
+        {
+            for (int attemptIndex = 0; attemptIndex < attempts; attemptIndex++)
+            {
+                try
+                {
+                    var image = await GetRandomCatImage();
+                    return image;
+                }
+                catch (WebException ex)
+                {
+                    Logger.Log(ex);
+                }
+            }
+
+            return null;
         }
 
         private static Task<byte[]> GetRandomCatImage()

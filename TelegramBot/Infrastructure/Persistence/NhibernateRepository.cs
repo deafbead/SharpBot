@@ -4,11 +4,11 @@ using NHibernate;
 
 namespace TelegramBot.Persistence
 {
-    class NhibernateRepository<TDTO> : IRepository<TDTO> where TDTO : class
+    class NHibernateRepository<TDTO> : IRepository<TDTO> where TDTO : class
     {
         private readonly ISession _session;
 
-        public NhibernateRepository(ISession session)
+        public NHibernateRepository(ISession session)
         {
             _session = session;
         }
@@ -30,7 +30,7 @@ namespace TelegramBot.Persistence
 
         public void Update(TDTO item)
         {
-            _session.Update(item);
+            InTransaction(s => s.Update(item));
         }
 
         public void Delete(TDTO item)

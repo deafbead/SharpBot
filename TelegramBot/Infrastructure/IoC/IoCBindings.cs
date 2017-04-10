@@ -31,7 +31,7 @@ namespace TelegramBot.IoC
             Bind<ILogger>().To<ConsoleLogger>();
             Bind<IBot>().To<BotImpl>();
             Bind<IThrottleFilter>().To<ThrottleFilter>();
-            Bind(typeof(IRepository<>)).To(typeof(NhibernateRepository<>));
+            Bind(typeof(IRepository<>)).To(typeof(NHibernateRepository<>));
             Bind<IRecordsTable>().To<RecordsTable>();
             Bind<ISession>()
                 .ToConstant(

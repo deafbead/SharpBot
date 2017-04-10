@@ -23,7 +23,7 @@ namespace TelegramBot.Bot.Games.Score
             {
                 Table("scores");
                 Id(t => t.Id).Column("id");
-                References(t => t.User).Column("user_id");
+                References(t => t.User).Column("user_id").Cascade.All();
                 Map(t => t.Points).Column("score");
                 Map(t => t.GameId).Column("game_id");
             }

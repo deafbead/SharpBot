@@ -53,12 +53,14 @@ namespace TelegramBot.Bot.Commands
         class GameState : ICommandState
         {
             private readonly QuizCommand _command;
+            private DateTime _questionPostedAt = DateTime.MinValue;
 
             public GameState(QuizCommand command)
             {
                 _command = command;
                 _questions = Resources.Quiz.Questions.Split(new[] {"\n"}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(q => q.Split('|'))
+                    .Where(q=>q.Length == 2)
                     .Select(q => new Question
                     {
                         Text = q[0],
@@ -82,10 +84,18 @@ namespace TelegramBot.Bot.Commands
                     return FromResult(new TextReply("Викторина завершена"));
                 }
 
-                if (MessageEquals(input, "не знаю"))
+                if (MessageEquals(input, "не знаю", "хз"))
                 {
+                    var timeSinceQuestionAsked = DateTime.Now - _questionPostedAt;
+                    var questionLastsAtLeast = TimeSpan.FromSeconds(15);
+                    if (timeSinceQuestionAsked < questionLastsAtLeast)
+                    {
+                        return FromResult(new TextReply($"Следующий вопрос будет доступен через {(questionLastsAtLeast-timeSinceQuestionAsked).ToString(@"hh\:mm\:ss")}"));
+                    }
+
                     string answer = _currentQuestion.Answer;
                     _currentQuestion = _questions.PickRandom();
+                    _questionPostedAt = DateTime.Now;
                     return Task.FromResult((IEnumerable<IReply>)new IReply[]
                     {
                         new TextReply($"Правильный ответ: {answer}"),
@@ -123,6 +133,7 @@ namespace TelegramBot.Bot.Commands
                     string answer = _currentQuestion.Answer;
                     _currentQuestion = _questions.PickRandom();
                     _command.RecordsTable.AddPoints(input.From, PointsPerCorrectAnswer, GameName);
+                    _questionPostedAt = DateTime.Now;
                     return Task.FromResult((IEnumerable<IReply>)new IReply[]
                     {
                         new TextReply($"Правильно, {input.From.FirstName} ты получаешь {PointsPerCorrectAnswer} очков! Это {answer}"),
@@ -136,6 +147,7 @@ namespace TelegramBot.Bot.Commands
             public Task<IEnumerable<IReply>> BeginGame()
             {
                 _currentQuestion = _questions.PickRandom();
+                _questionPostedAt = DateTime.Now;
                 return Task.FromResult((IEnumerable<IReply>)new IReply[]
                 {
                     new TextReply($"Викторина начинается!"),
@@ -148,3 +160,4 @@ namespace TelegramBot.Bot.Commands
         }
     }
 }
+
