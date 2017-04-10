@@ -33,15 +33,7 @@ namespace TelegramBot.Bot.Commands
 
         protected abstract Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input);
 
-        protected static bool StringEquals(string x, string y)
-        {
-            return x!= null && y != null && string.Equals(x.Trim(), y.Trim(), StringComparison.OrdinalIgnoreCase);
-        }
 
-        protected static bool MessageEquals(TelegramMessageEventArgs args, params string[] values)
-        {
-            return values.Any(y => StringEquals(args?.Message?.Text, y));
-        }
 
         protected static bool MessageStartsWith(TelegramMessageEventArgs args, params string[] values)
         {

@@ -10,6 +10,8 @@ using Ninject.Modules;
 using TelegramBot.API;
 using TelegramBot.Bot;
 using TelegramBot.Bot.Commands;
+using TelegramBot.Bot.Commands.Quiz;
+using TelegramBot.Bot.Commands.Quiz.Ranks;
 using TelegramBot.Bot.Games.Score;
 using TelegramBot.Bot.Replies;
 using TelegramBot.Bot.Updates;
@@ -33,6 +35,7 @@ namespace TelegramBot.IoC
             Bind<IThrottleFilter>().To<ThrottleFilter>();
             Bind(typeof(IRepository<>)).To(typeof(NHibernateRepository<>));
             Bind<IRecordsTable>().To<RecordsTable>();
+            Bind<IQuizRanksProvider>().To<QuizRanksProvider>();
             Bind<ISession>()
                 .ToConstant(
                     NHibernateConfiguration.GetSessionFactory(ConfigurationManager.AppSettings["persistence"], false).OpenSession());

@@ -12,5 +12,12 @@ namespace TelegramBot.Util
         {
             return string.Join(separator, items);
         }
+
+        public static string StartWithUppercase(this string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            if (value.Length == 1) return value.ToUpper();
+            return value[0].ToString().ToUpper() + value.Substring(1);
+        }
     }
 }

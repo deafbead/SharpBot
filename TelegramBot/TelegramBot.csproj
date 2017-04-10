@@ -114,7 +114,15 @@
     <Compile Include="API\Models\Voice.cs" />
     <Compile Include="Bot\Commands\Impl\AnekdotCommand.cs" />
     <Compile Include="Bot\Commands\Impl\GifCommand.cs" />
-    <Compile Include="Bot\Commands\Impl\QuizCommand.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\Ranks\IQuizRank.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\Ranks\IQuizRanksProvider.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\Questions\QuizQuestion.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\QuizCommand.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\Ranks\QuizRankDTO.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\Ranks\QuizRanks.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\Ranks\QuizRanksProvider.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\States\QuizBeginGameState.cs" />
+    <Compile Include="Bot\Commands\Impl\Quiz\States\QuizMidGameState.cs" />
     <Compile Include="Bot\Commands\Impl\SosachCommand.cs" />
     <Compile Include="Bot\Commands\Impl\UptimeCommand.cs" />
     <Compile Include="Bot\Commands\Impl\WolframCommand.cs" />

@@ -16,7 +16,7 @@ namespace TelegramBot.Bot.Commands
 
     abstract class StatefulCommand : Command
     {
-        protected abstract ICommandState CurrentState { get; set; }
+        public abstract ICommandState CurrentState { get; set; }
 
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {

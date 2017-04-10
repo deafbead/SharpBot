@@ -16,7 +16,7 @@ namespace TelegramBot.Bot.Commands
     {
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
-            return MessageEquals(input, "anek", "анекдот", "анек");
+            return input.MessageEquals("anek", "анекдот", "анек");
         }
 
         protected override async Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)

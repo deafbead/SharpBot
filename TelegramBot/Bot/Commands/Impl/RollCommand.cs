@@ -13,7 +13,7 @@ namespace TelegramBot.Bot.Commands
         
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
-            return MessageEquals(input, "ролл", "roll", "/roll");
+            return input.MessageEquals("ролл", "roll", "/roll");
         }
 
         protected override Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)

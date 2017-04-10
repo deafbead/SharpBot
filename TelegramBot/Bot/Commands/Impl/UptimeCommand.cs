@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TelegramBot.Bot.Args;
 using TelegramBot.Bot.Replies;
+using TelegramBot.Util;
 
 namespace TelegramBot.Bot.Commands
 {
@@ -16,7 +17,7 @@ namespace TelegramBot.Bot.Commands
 
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
-            return MessageEquals(input, "аптайм", "uptime", "/uptime");
+            return input.MessageEquals("аптайм", "uptime", "/uptime");
         }
 
         protected override Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)

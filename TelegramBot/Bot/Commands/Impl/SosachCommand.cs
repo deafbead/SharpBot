@@ -77,7 +77,7 @@ namespace TelegramBot.Bot.Commands
         {
             if (!input.HasText()) return false;
             string prefix = "харкач";
-            return MessageEquals(input, prefix) || Regex.IsMatch(input.Message.Text, prefix + @" +\/.", RegexOptions.IgnoreCase);
+            return input.MessageEquals(prefix) || Regex.IsMatch(input.Message.Text, prefix + @" +\/.", RegexOptions.IgnoreCase);
         }
 
         protected override async Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)

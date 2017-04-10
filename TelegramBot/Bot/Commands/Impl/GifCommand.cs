@@ -16,7 +16,7 @@ namespace TelegramBot.Bot.Commands
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
             OneRequestPer(TimeSpan.FromSeconds(5));
-            return MessageEquals(input, "gif", "гифочку", "гифку", "гиф");
+            return input.MessageEquals("gif", "гифочку", "гифку", "гиф");
         }
 
         protected override async Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
