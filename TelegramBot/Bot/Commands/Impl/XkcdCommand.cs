@@ -12,8 +12,6 @@ namespace TelegramBot.Bot.Commands
 {
     class XkcdCommand : Command
     {
-        
-
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
             return MessageEquals(input, "xkcd");

@@ -4,14 +4,17 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NHibernate;
 using Ninject;
 using Ninject.Modules;
 using TelegramBot.API;
 using TelegramBot.Bot;
 using TelegramBot.Bot.Commands;
+using TelegramBot.Bot.Games.Score;
 using TelegramBot.Bot.Replies;
 using TelegramBot.Bot.Updates;
 using TelegramBot.Logging;
+using TelegramBot.Persistence;
 using TelegramBot.Util;
 
 namespace TelegramBot.IoC
@@ -28,7 +31,11 @@ namespace TelegramBot.IoC
             Bind<ILogger>().To<ConsoleLogger>();
             Bind<IBot>().To<BotImpl>();
             Bind<IThrottleFilter>().To<ThrottleFilter>();
-            //Bind<IKernel>().ToConstant(Kernel);
+            Bind(typeof(IRepository<>)).To(typeof(NhibernateRepository<>));
+            Bind<IRecordsTable>().To<RecordsTable>();
+            Bind<ISession>()
+                .ToConstant(
+                    NHibernateConfiguration.GetSessionFactory(ConfigurationManager.AppSettings["persistence"], false).OpenSession());
         }
     }
 }

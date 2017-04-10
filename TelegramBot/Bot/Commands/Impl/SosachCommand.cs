@@ -75,6 +75,7 @@ namespace TelegramBot.Bot.Commands
 
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
+            if (!input.HasText()) return false;
             string prefix = "харкач";
             return MessageEquals(input, prefix) || Regex.IsMatch(input.Message.Text, prefix + @" +\/.", RegexOptions.IgnoreCase);
         }

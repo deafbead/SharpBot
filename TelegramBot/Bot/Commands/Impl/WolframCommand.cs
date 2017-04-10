@@ -18,7 +18,7 @@ namespace TelegramBot.Bot.Commands
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
             OneRequestPer(TimeSpan.FromSeconds(30));
-            return input?.Message?.Text.StartsWith("!") ?? false;
+            return MessageStartsWith(input, "!");
         }
 
         protected override Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)

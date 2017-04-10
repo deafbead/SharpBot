@@ -40,12 +40,14 @@ namespace TelegramBot.Bot.Commands
 
         protected static bool MessageEquals(TelegramMessageEventArgs args, params string[] values)
         {
-            return StringEqualsToOneOf(args?.Message?.Text, values);
+            return values.Any(y => StringEquals(args?.Message?.Text, y));
         }
 
-        private static bool StringEqualsToOneOf(string x, IEnumerable<string> ys)
+        protected static bool MessageStartsWith(TelegramMessageEventArgs args, params string[] values)
         {
-            return ys.Any(y => StringEquals(x, y));
+            string message = args?.Message?.Text?.ToUpperInvariant().Trim();
+            if (message == null) return false;
+            return values.Any(v => message.StartsWith(v.Trim().ToUpperInvariant()));
         }
 
         protected static IEnumerable<IReply> Nothing => Enumerable.Empty<IReply>();

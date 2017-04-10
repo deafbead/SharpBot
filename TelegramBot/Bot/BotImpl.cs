@@ -101,7 +101,7 @@ namespace TelegramBot.Bot
         
         private void ProcessException(Exception ex)
         {
-            IsRunning = false;
+            //   IsRunning = false;
             Logger?.Log(LogLevel.Fatal, ex.Message);
         }
 
