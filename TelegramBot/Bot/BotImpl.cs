@@ -5,6 +5,7 @@ using Ninject;
 using TelegramBot.API;
 using TelegramBot.API.Models;
 using TelegramBot.Bot.Args;
+using TelegramBot.Bot.ChatProcessors;
 using TelegramBot.Bot.Commands;
 using TelegramBot.Bot.Replies;
 using TelegramBot.Bot.Updates;
@@ -14,20 +15,16 @@ namespace TelegramBot.Bot
 {
     public class BotImpl : IBot
     {
-        private readonly ApiClient _api;
-        private readonly ICommandInvoker _invoker;
         private readonly IUpdatesProvider _updatesProvider;
-        private readonly IReplySender _replySender;
-       
+        private readonly IChatProcessorFactory _chatProcessorFactory;
+
         [Inject]
         public ILogger Logger { get; set; }
 
-        public BotImpl(ApiClient api, ICommandInvoker invoker, IUpdatesProvider updatesProvider, IReplySender replySender)
+        public BotImpl(IUpdatesProvider updatesProvider, IChatProcessorFactory chatProcessorFactory)
         {
-            _api = api;
-            _invoker = invoker;
             _updatesProvider = updatesProvider;
-            _replySender = replySender;
+            _chatProcessorFactory = chatProcessorFactory;
         }
 
         public async Task Start()
@@ -58,10 +55,15 @@ namespace TelegramBot.Bot
 
                     foreach (var update in updates)
                     {
-                        if (update.Message != null)
+                        if (update.Message == null) continue;
+
+                        var processors = _chatProcessorFactory.GetProcessors(update.Message.Chat.Id);
+                        foreach (var processor in processors)
                         {
-                            await ProcessMessage(update.Message);
+                            await processor.ProcessUpdate(update);
                         }
+
+                        //await ProcessMessage(update.Message);
                     }
                 }
                 catch (Exception ex)
@@ -81,23 +83,7 @@ namespace TelegramBot.Bot
             } while (updates.Count > 0);
         }
 
-        private async Task ProcessMessage(Message message)
-        {
-            var args = new TelegramMessageEventArgs
-            {
-                ChatId = message.Chat.Id,
-                MessageId = message.MessageId,
-                From = message.From,
-                Message = message
-            };
-
-            var results = await _invoker.Invoke(args);
-            foreach (var result in results)
-            {
-                await _replySender.Send(result, args.ChatId);
-                await Task.Delay(300);
-            }
-        }
+      
         
         private void ProcessException(Exception ex)
         {

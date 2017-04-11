@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using TelegramBot.API;
 using TelegramBot.API.Models;
 using TelegramBot.Bot.Args;
+using TelegramBot.Bot.Commands.Attributes;
 using TelegramBot.Bot.Replies;
 using TelegramBot.Util;
 
 namespace TelegramBot.Bot.Commands
 {
+    [PersonalCommand]
     class MeCommand : Command 
     {
         private readonly ApiClient _client;
