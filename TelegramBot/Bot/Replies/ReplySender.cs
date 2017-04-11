@@ -18,9 +18,9 @@ namespace TelegramBot.Bot.Replies
             return reply.AcceptVisitor(this, chatId);
         }
 
-        public async Task VisitText(TextReply reply, long chatId)
+        public Task VisitText(TextReply reply, long chatId)
         {
-            await _client.SendRequestAsync<object>("sendMessage", new MessageToSend
+            return _client.SendRequestAsync<object>("sendMessage", new MessageToSend
             {
                 ChatId = chatId.ToString(),
                 Text = reply.Text,
@@ -31,15 +31,14 @@ namespace TelegramBot.Bot.Replies
             });
         }
 
-        public async Task VisitImage(ImageReply reply, long chatId)
+        public Task VisitImage(ImageReply reply, long chatId)
         {
-            await _client.SendPhoto<object>(chatId, reply.Image, reply.Caption);
-                
+            return _client.SendPhoto(chatId, reply.Image, reply.Caption);
         }
 
-        public async Task VisitButtons(ButtonsReply reply, long chatId)
+        public Task VisitButtons(ButtonsReply reply, long chatId)
         {
-            await _client.SendRequestAsync<object>("sendMessage", new MessageToSend
+            return _client.SendRequestAsync<object>("sendMessage", new MessageToSend
             {
                 ChatId = chatId.ToString(),
                 Text = reply.Title,
@@ -50,14 +49,14 @@ namespace TelegramBot.Bot.Replies
             });
         }
 
-        public async Task VisitDocument(DocumentReply reply, long chatId)
+        public Task VisitDocument(DocumentReply reply, long chatId)
         {
-            await _client.SendDocument<object>(chatId, reply.Document);
+            return _client.SendDocument(chatId, reply.Document);
         }
 
-        public async Task VisitVideo(VideoReply reply, long chatId)
+        public Task VisitVideo(VideoReply reply, long chatId)
         {
-            await _client.SendVideo<object>(chatId, reply.Video);
+            return _client.SendVideo(chatId, reply.Video);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using TelegramBot.API;
 using TelegramBot.API.Models;
@@ -25,7 +26,12 @@ namespace TelegramBot.Bot.Updates
             {
                 Offset = _updateOffset
             });
-            
+
+            if (response == null)
+            {
+                throw new WebException("Unable to get updates from Telegram server");
+            }
+
             if (response.Success && response.Updates.Any())
             {
                 _updateOffset = response.Updates.Max(t=>t.UpdateId) + 1;

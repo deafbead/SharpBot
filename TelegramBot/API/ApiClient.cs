@@ -32,37 +32,22 @@ namespace TelegramBot.API
             return Post<TResult>(request);
         }
 
-        public Task<TResult> SendPhoto<TResult>(long chatId, byte[] bytes, string caption = null)
+        public Task SendPhoto(long chatId, byte[] bytes, string caption = null)
         {
-            RestRequest restRequest = new RestRequest("sendPhoto")
-            {
-                RequestFormat = DataFormat.Json,
-                Method = Method.POST
-            };
-            restRequest.AddHeader("Content-Type", "multipart/form-data");
-            restRequest.AddParameter("chat_id", chatId);
-            if (caption != null)
-            {
-                restRequest.AddParameter("caption", caption);
-            }
-            restRequest.AddFile("photo", bytes, "file");
-            return Post<TResult>(restRequest);
+              return SendData<object>("photo", chatId, bytes, caption);
         }
 
-        public Task<TResult> SendDocument<TResult>(long chatId, byte[] bytes)
+        public Task SendDocument(long chatId, byte[] bytes, string caption = null)
         {
-            RestRequest restRequest = new RestRequest("sendDocument")
-            {
-                RequestFormat = DataFormat.Json,
-                Method = Method.POST
-            };
-            restRequest.AddHeader("Content-Type", "multipart/form-data");
-            restRequest.AddParameter("chat_id", chatId);
-            restRequest.AddFile("document", bytes, "file");
-            return Post<TResult>(restRequest);
+               return SendData<object>("document", chatId, bytes, caption);
         }
 
-        public Task<TResult> SendVideo<TResult>(long chatId, byte[] bytes)
+        public Task SendVideo(long chatId, byte[] bytes, string caption = null)
+        {
+            return SendData<object>("video", chatId, bytes, caption);
+        }
+
+        private Task<TResult> SendData<TResult>(string dataId, long chatId, byte[] bytes, string caption)
         {
             RestRequest restRequest = new RestRequest("sendVideo")
             {
@@ -70,11 +55,14 @@ namespace TelegramBot.API
                 Method = Method.POST
             };
             restRequest.AddHeader("Content-Type", "multipart/form-data");
+            if (!string.IsNullOrEmpty(caption))
+            {
+                restRequest.AddParameter("caption", caption);
+            }
             restRequest.AddParameter("chat_id", chatId);
-            restRequest.AddFile("video", bytes, "file");
+            restRequest.AddFile(dataId, bytes, "file");
             return Post<TResult>(restRequest);
         }
-
 
         private async Task<TResult> Post<TResult>(IRestRequest request)
         {

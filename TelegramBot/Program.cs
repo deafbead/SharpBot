@@ -18,8 +18,7 @@ namespace TelegramBot
 
         static void Main(string[] args)
         {
-            var bot = Kernel.Get<IBot>();
-            Task.WaitAll(bot.Start());
+            Kernel.Get<IBot>().Start().Wait();
         }
     }
 }
