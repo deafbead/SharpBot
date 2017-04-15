@@ -3,5 +3,7 @@
     public interface IReply
     {
         TResult AcceptVisitor<TArgs, TResult>(IReplyVisitor<TArgs, TResult> visitor, TArgs args);
+
+        long ChatId { get; set; }
     }
 }

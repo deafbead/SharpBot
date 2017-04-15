@@ -12,8 +12,9 @@ namespace TelegramBot.Bot.Replies
         public string Title { get; }
         public ReplyKeyboardMarkup Markup { get; set; }
 
-        public ButtonsReply(string title, KeyboardButton[][] buttons)
+        public ButtonsReply(long chatId, string title, KeyboardButton[][] buttons)
         {
+            ChatId = chatId;
             Title = title;
             Markup = new ReplyKeyboardMarkup()
             {
@@ -25,5 +26,7 @@ namespace TelegramBot.Bot.Replies
         {
             return visitor.VisitButtons(this, args);
         }
+
+        public long ChatId { get; set; }
     }
 }

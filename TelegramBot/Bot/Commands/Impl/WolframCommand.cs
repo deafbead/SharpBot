@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TelegramBot.Bot.Args;
 using TelegramBot.Bot.Replies;
+using TelegramBot.Util;
 using WolframAlphaNET;
 using WolframAlphaNET.Objects;
 
@@ -18,7 +19,7 @@ namespace TelegramBot.Bot.Commands
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
             OneRequestPer(TimeSpan.FromSeconds(30));
-            return MessageStartsWith(input, "!");
+            return input.MessageStartsWith("!");
         }
 
         protected override Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
@@ -45,7 +46,7 @@ namespace TelegramBot.Bot.Commands
                 }
             }
 
-            return FromResult(new TextReply(sb.ToString()));
+            return FromResult(input.TextReply(sb.ToString()));
         }
     }
 }

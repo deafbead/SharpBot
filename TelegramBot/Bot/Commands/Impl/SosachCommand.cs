@@ -84,7 +84,7 @@ namespace TelegramBot.Bot.Commands
         {
             string board = GetBoard(input.Message.Text);
             string output = await GetThreadsList(board);
-            return new TextReply(output).Yield();
+            return input.TextReply(output).Yield();
         }
 
         private string GetBoard(string message)

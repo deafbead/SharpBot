@@ -35,7 +35,7 @@ namespace TelegramBot.Bot.ChatProcessors
             var results = await _invoker.Invoke(args);
             foreach (var result in results)
             {
-                await _replySender.Send(result, args.ChatId);
+                await _replySender.Send(result);
                 await Task.Delay(300);
             }
         }

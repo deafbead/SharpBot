@@ -42,7 +42,7 @@ namespace TelegramBot.Bot.Commands.Quiz.States
             if (input.MessageEquals("всё", "все", "конец", "завершить", "end"))
             {
                 _command.CurrentState = new QuizBeginGameState(_command);
-                return new TextReply("Викторина завершена").AsResult();
+                return input.TextReply("Викторина завершена").AsResult();
             }
 
             if (input.MessageEquals("не знаю", "хз"))
@@ -51,7 +51,7 @@ namespace TelegramBot.Bot.Commands.Quiz.States
                 var questionLastsAtLeast = TimeSpan.FromSeconds(15);
                 if (timeSinceQuestionAsked < questionLastsAtLeast)
                 {
-                    return new TextReply($"Следующий вопрос будет доступен через {(questionLastsAtLeast - timeSinceQuestionAsked).ToString(@"hh\:mm\:ss")}").AsResult();
+                    return input.TextReply($"Следующий вопрос будет доступен через {(questionLastsAtLeast - timeSinceQuestionAsked).ToString(@"hh\:mm\:ss")}").AsResult();
                 }
 
                 string answer = _currentQuestion.Answer;
@@ -59,8 +59,8 @@ namespace TelegramBot.Bot.Commands.Quiz.States
                 _questionPostedAt = DateTime.Now;
                 return Task.FromResult((IEnumerable<IReply>)new IReply[]
                 {
-                    new TextReply($"Правильный ответ: {answer}"),
-                    new TextReply($"Следующий вопрос: {_currentQuestion.Text}")
+                    input.TextReply($"Правильный ответ: {answer}"),
+                    input.TextReply($"Следующий вопрос: {_currentQuestion.Text}")
                 });
 
             }
@@ -74,7 +74,7 @@ namespace TelegramBot.Bot.Commands.Quiz.States
                 {
                     output += $" До следующего ранга: {rank.NextRank.PointsRequired - score}";
                 }
-                return new TextReply(output).AsResult();
+                return input.TextReply(output).AsResult();
             }
 
             if (input.MessageEquals("топ"))
@@ -86,7 +86,7 @@ namespace TelegramBot.Bot.Commands.Quiz.States
                     .Take(count)
                     .StringJoin("\r\n");
 
-                return new TextReply($"Топ-{count} игроков:\r\n\r\n" + top).AsResult();
+                return input.TextReply($"Топ-{count} игроков:\r\n\r\n" + top).AsResult();
             }
 
             if (input.MessageEquals(_currentQuestion.Answer))
@@ -113,22 +113,22 @@ namespace TelegramBot.Bot.Commands.Quiz.States
                 correctMessage += $"!  Правильный ответ: {answer}.";
                 return Task.FromResult((IEnumerable<IReply>)new IReply[]
                 {
-                    new TextReply(correctMessage),
-                    new TextReply($"Следующий вопрос: {_currentQuestion.Text}")
+                    input.TextReply(correctMessage),
+                    input.TextReply($"Следующий вопрос: {_currentQuestion.Text}")
                 });
             }
 
             return Task.FromResult(Enumerable.Empty<IReply>());
         }
 
-        public Task<IEnumerable<IReply>> BeginGame()
+        public Task<IEnumerable<IReply>> BeginGame(TelegramMessageEventArgs input)
         {
             _currentQuestion = _questions.PickRandom();
             _questionPostedAt = DateTime.Now;
             return Task.FromResult((IEnumerable<IReply>)new IReply[]
             {
-                new TextReply($"Викторина начинается!"),
-                new TextReply($"Первый вопрос: {_currentQuestion.Text}")
+                input.TextReply($"Викторина начинается!"),
+                input.TextReply($"Первый вопрос: {_currentQuestion.Text}")
             });
         }
 

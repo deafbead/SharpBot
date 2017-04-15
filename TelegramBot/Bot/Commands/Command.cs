@@ -23,7 +23,7 @@ namespace TelegramBot.Bot.Commands
             if (ThrottleFilter != null && !ThrottleFilter.CanExecute())
             {
                 TimeSpan remainingTime = ThrottleFilter.Frequency.Value - (DateTime.Now - ThrottleFilter.LastExecution);
-                return new TextReply(GetOverThrottleText(remainingTime)).Yield();
+                return input.TextReply(GetOverThrottleText(remainingTime)).Yield();
             }
 
             IEnumerable<IReply> result = await OnInvoke(input);
@@ -35,12 +35,7 @@ namespace TelegramBot.Bot.Commands
 
 
 
-        protected static bool MessageStartsWith(TelegramMessageEventArgs args, params string[] values)
-        {
-            string message = args?.Message?.Text?.ToUpperInvariant().Trim();
-            if (message == null) return false;
-            return values.Any(v => message.StartsWith(v.Trim().ToUpperInvariant()));
-        }
+     
 
         protected static IEnumerable<IReply> Nothing => Enumerable.Empty<IReply>();
 

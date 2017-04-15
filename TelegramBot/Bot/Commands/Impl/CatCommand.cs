@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -19,7 +21,7 @@ namespace TelegramBot.Bot.Commands
         public override bool ShouldInvoke(TelegramMessageEventArgs input)
         {
             OneRequestPer(TimeSpan.FromSeconds(5));
-            return input?.Message?.Text?.ToUpper().Contains("КОТ") ?? false;
+            return input.MessageContains("кот");
         }
 
         protected override async Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
@@ -29,14 +31,16 @@ namespace TelegramBot.Bot.Commands
             {
                 return new IReply[]
                 {
-                    new TextReply("Кажется, котобот сломался..."), 
+                    input.TextReply("Кажется, котобот сломался..."), 
                 };
             }
-            
-            return new IReply[]
-            {
-                new ImageReply(image, "Кто-то сказал " + FindCatWord(input.Message.Text) + "???")
-            };
+
+            string replyText = "Кто-то сказал " + FindCatWord(input.Message.Text) + "???";
+            IReply reply = IsGif(image)
+                ? (IReply) input.VideoReply(image, replyText)
+                : input.ImageReply(image, replyText);
+
+            return reply.Yield();
         }
 
         private async Task<byte[]> TryGetRandomCat(int attempts)
@@ -82,6 +86,14 @@ namespace TelegramBot.Bot.Commands
         protected override string GetOverThrottleText(TimeSpan remainingTime)
         {
             return "Прости, следующий котик будет только через " + remainingTime.ToHmsString();
+        }
+
+        private bool IsGif(byte[] bytes)
+        {
+            return bytes.Take(3).SequenceEqual(new byte[]
+                   {
+                       (byte)'G', (byte)'I', (byte)'F'
+                   });
         }
     }
 }

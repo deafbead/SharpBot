@@ -1,21 +1,25 @@
 ﻿using System.Threading.Tasks;
 using TelegramBot.API;
 using TelegramBot.Bot.Types;
+using TelegramBot.Logging;
 
 namespace TelegramBot.Bot.Replies
 {
     class ReplySender : IReplyVisitor<long, Task>, IReplySender
     {
         private readonly ApiClient _client;
+        private readonly ILogger _logger;
 
-        public ReplySender(ApiClient client)
+        public ReplySender(ApiClient client, ILogger logger)
         {
             _client = client;
+            _logger = logger;
         }
 
-        public Task Send(IReply reply, long chatId)
+        public Task Send(IReply reply)
         {
-            return reply.AcceptVisitor(this, chatId);
+            _logger.Log(LogLevel.Message, $"<<< {reply.ToString()}");
+            return reply.AcceptVisitor(this, reply.ChatId);
         }
 
         public Task VisitText(TextReply reply, long chatId)
@@ -51,12 +55,12 @@ namespace TelegramBot.Bot.Replies
 
         public Task VisitDocument(DocumentReply reply, long chatId)
         {
-            return _client.SendDocument(chatId, reply.Document);
+            return _client.SendDocument(chatId, reply.Document, reply.Caption);
         }
 
         public Task VisitVideo(VideoReply reply, long chatId)
         {
-            return _client.SendVideo(chatId, reply.Video);
+            return _client.SendVideo(chatId, reply.Video, reply.Caption);
         }
     }
 }

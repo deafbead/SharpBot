@@ -25,7 +25,7 @@ namespace TelegramBot.Bot.Commands.Quiz.States
 
             var gs = new QuizMidGameState(_command);
             _command.CurrentState = gs;
-            return gs.BeginGame();
+            return gs.BeginGame(input);
         }
     }
 }

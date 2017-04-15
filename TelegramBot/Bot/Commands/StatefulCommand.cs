@@ -27,5 +27,6 @@ namespace TelegramBot.Bot.Commands
         {
             return CurrentState.Invoke(input);
         }
+        
     }
 }

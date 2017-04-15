@@ -18,7 +18,7 @@ namespace TelegramBot.Bot.Commands
 
         protected override Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
         {
-            return FromResult(new TextReply(_random.Next(0, 101).ToString()));
+            return FromResult(input.TextReply(_random.Next(0, 101).ToString()));
         }
     }
 }

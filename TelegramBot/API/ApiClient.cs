@@ -49,7 +49,7 @@ namespace TelegramBot.API
 
         private Task<TResult> SendData<TResult>(string dataId, long chatId, byte[] bytes, string caption)
         {
-            RestRequest restRequest = new RestRequest("sendVideo")
+            RestRequest restRequest = new RestRequest("send" + dataId)
             {
                 RequestFormat = DataFormat.Json,
                 Method = Method.POST

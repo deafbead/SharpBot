@@ -19,10 +19,10 @@ namespace TelegramBot.Bot.Commands
 
         protected override async Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
         {
-            return (await GetRandomXkcd()).Yield();
+            return (await GetRandomXkcd(input)).Yield();
         }
 
-        private async Task<ImageReply> GetRandomXkcd()
+        private async Task<ImageReply> GetRandomXkcd(TelegramMessageEventArgs input)
         {
             using (var client = new WebClient())
             {
@@ -34,7 +34,7 @@ namespace TelegramBot.Bot.Commands
                 string imageUrl = document.QuerySelector(".main > a:nth-child(6) > img:nth-child(1)").Attributes["src"].Value;
                 string description = document.QuerySelector(".main > h1:nth-child(3)")?.InnerText;
                 byte[] data = await client.DownloadDataTaskAsync(imageUrl);
-                return new ImageReply(data, description);
+                return input.ImageReply(data, description);
 
             }
         }

@@ -4,6 +4,6 @@ namespace TelegramBot.Bot.Replies
 {
     public interface IReplySender
     {
-        Task Send(IReply reply, long chatId);
+        Task Send(IReply reply);
     }
 }

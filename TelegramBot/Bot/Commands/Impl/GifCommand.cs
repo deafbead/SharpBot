@@ -24,7 +24,7 @@ namespace TelegramBot.Bot.Commands
             int poolSize = 6393;
             int index = _random.Next(poolSize) + 1;
             byte[] gif = await GetGif(index);
-            return new VideoReply(gif).Yield();
+            return input.VideoReply(gif).Yield();
 
         }
 

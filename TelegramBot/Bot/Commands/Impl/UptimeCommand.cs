@@ -23,7 +23,7 @@ namespace TelegramBot.Bot.Commands
         protected override Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
         {
             TimeSpan diff = DateTime.Now - StartDateTime;
-            return FromResult(new TextReply(diff.ToString(@"hh\:mm\:ss")));
+            return FromResult(input.TextReply(diff.ToString(@"hh\:mm\:ss")));
         }
     }
 }

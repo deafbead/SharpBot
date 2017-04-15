@@ -24,7 +24,7 @@ namespace TelegramBot.Bot.Commands
             var user = await TryGet<User>(_client, "getme");
             if (user?.Username == null) return Nothing;
 
-            return new TextReply($"Привет, меня зовут {user.Username}").Yield();
+            return input.TextReply($"Привет, меня зовут {user.Username}").Yield();
         }
 
 

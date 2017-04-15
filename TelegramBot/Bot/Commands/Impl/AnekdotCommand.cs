@@ -23,7 +23,7 @@ namespace TelegramBot.Bot.Commands
         {
             string anekdot = await Task.Run(()=> GetAnekdot());
             string decoded = HttpUtility.HtmlDecode(anekdot); //no idea if required
-            return new TextReply(decoded).Yield();
+            return input.TextReply(decoded).Yield();
         }
 
         private string GetAnekdot()

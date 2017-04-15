@@ -31,5 +31,20 @@ namespace TelegramBot.API.Models
         [JsonProperty("username")]
         internal string Username { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            var user = obj as User;
+            return user != null ? Equals(user) : base.Equals(obj);
+        }
+
+        protected bool Equals(User other)
+        {
+            return Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
     }
 }

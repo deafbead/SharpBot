@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TelegramBot.Bot.Commands.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class)]
     abstract class CommandAttribute : Attribute
     {
     }
