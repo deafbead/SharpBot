@@ -1,21 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using TelegramBot.Persistence;
 
 namespace TelegramBot.Bot.Commands.Quiz.Ranks
 {
     class QuizRanksProvider : IQuizRanksProvider
     {
-        private readonly ISession _session;
+        private readonly IRepository<QuizRankDTO> _persistence;
 
-        public QuizRanksProvider(ISession session)
+        public QuizRanksProvider(IRepository<QuizRankDTO> persistence)
         {
-            _session = session;
+            _persistence = persistence;
         }
 
         public IQuizRank GetRank(int points)
         {
-            var ranks = _session.QueryOver<QuizRankDTO>().List().OrderBy(t => t.PointsRequired).ToList();
+            var ranks = _persistence.GetAll().OrderBy(t => t.PointsRequired).ToList();
             return GetRankInternal(points, ranks);
         }
 

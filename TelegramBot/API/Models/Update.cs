@@ -15,49 +15,49 @@ namespace TelegramBot.API.Models
         /// </summary>
         /// , Required = Required.Always
         [JsonProperty("update_id")]
-        internal int UpdateId { get; set; }
+        public int UpdateId { get; set; }
 
         /// <summary>
         /// New incoming message of any kind — text, photo, sticker, etc.
         /// </summary>
         /// 
         [JsonProperty("message")]
-        internal Message Message { get; set; }
+        public Message Message { get; set; }
 
         /// <summary>
         /// New version of a message that is known to the bot and was edited
         /// </summary>
         [JsonProperty("edited_message")]
-        internal Message EditedMessage { get; set; }
+        public Message EditedMessage { get; set; }
 
         /// <summary>
         /// New incoming channel post of any kind — text, photo, sticker, etc.
         /// </summary>
         [JsonProperty("channel_post")]
-        internal Message ChannelPost { get; set; }
+        public Message ChannelPost { get; set; }
 
         /// <summary>
         /// New version of a channel post that is known to the bot and was edited
         /// </summary>
         [JsonProperty("edited_channel_post")]
-        internal Message EditedChannelPost { get; set; }
+        public Message EditedChannelPost { get; set; }
 
         /// <summary>
         /// New incoming inline query
         /// </summary>
         [JsonProperty("inline_query")]
-        internal InlineQuery InlineQuery { get; set; }
+        public InlineQuery InlineQuery { get; set; }
 
         /// <summary>
         /// The result of an inline query that was chosen by a user and sent to their chat partner
         /// </summary>
         [JsonProperty("chosen_inline_result")]
-        internal ChosenInlineResult ChosenInlineResult { get; set; }
+        public ChosenInlineResult ChosenInlineResult { get; set; }
 
         /// <summary>
         /// New incoming callback query
         /// </summary>
         [JsonProperty("callback_query")]
-        internal CallbackQuery CallbackQuery { get; set; }
+        public CallbackQuery CallbackQuery { get; set; }
     }
 }

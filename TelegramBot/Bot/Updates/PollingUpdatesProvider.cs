@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Ninject;
 using TelegramBot.API;
 using TelegramBot.API.Models;
 using TelegramBot.Bot.Types;
@@ -9,18 +11,18 @@ using TelegramBot.Logging;
 
 namespace TelegramBot.Bot.Updates
 {
-    class UpdatesProvider : IUpdatesProvider
+    class PollingUpdatesProvider : IPollingUpdatesProvider
     {
         private readonly ApiClient _client;
-        private readonly ILogger _logger;
+
+        [Inject]
+        public ILogger Logger { get; set; }
 
         private int _updateOffset = 0;
-        private List<int> _processedUpdates = new List<int>();
-
-        public UpdatesProvider(ApiClient client, ILogger logger)
+        
+        public PollingUpdatesProvider(ApiClient client)
         {
             _client = client;
-            _logger = logger;
         }
 
         public async Task<ICollection<Update>> GetUpdates()
@@ -47,13 +49,15 @@ namespace TelegramBot.Bot.Updates
 
         private void LogUpdates(IEnumerable<Update> updates)
         {
+            if (Logger == null) return;
             foreach (var update in updates)
             {
                 var message = update.Message;
                 if (message == null) continue;
-                _logger.Log(LogLevel.Message,
+                Logger.Log(LogLevel.Message,
                     $">>> {update.Message.From.FirstName} {update.Message.From.LastName}: {update.Message.Text}");
             }
         }
+        
     }
 }

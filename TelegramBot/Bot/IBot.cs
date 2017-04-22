@@ -1,12 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using TelegramBot.API;
 
 namespace TelegramBot.Bot
 {
     public interface IBot
     {
-        bool IsRunning { get; }
-
-        Task Start();
-        void Stop();
+        ApiClient ApiClient { get; }
     }
 }

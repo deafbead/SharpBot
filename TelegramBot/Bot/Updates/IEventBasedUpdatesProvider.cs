@@ -5,9 +5,8 @@ using TelegramBot.API.Models;
 
 namespace TelegramBot.Bot.Updates
 {
-    public interface IUpdatesProvider
+    public interface IPollingUpdatesProvider
     {
         Task<ICollection<Update>> GetUpdates();
-
     }
 }

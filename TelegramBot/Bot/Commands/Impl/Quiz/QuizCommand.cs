@@ -30,7 +30,7 @@ namespace TelegramBot.Bot.Commands.Quiz
         public string Treat(User user)
         {
             int points = RecordsTable.GetPoints(user, GameName);
-            string rank = RanksProvider.GetRank(points).Name;
+            string rank = RanksProvider.GetRank(points)?.Name ?? ""; 
             return $"{rank} {user.FirstName} {user.LastName}";
         }
 

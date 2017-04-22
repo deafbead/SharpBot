@@ -21,8 +21,8 @@ namespace TelegramBot.Bot.Commands.Dice
 
         public DiceBet Bet { get; set; }
 
-        public async Task Begin()
-        {
+        //public async Task Begin()
+        //{
             //do
             //{
             //    Winner = null;
@@ -47,7 +47,7 @@ namespace TelegramBot.Bot.Commands.Dice
             //    Players.RemoveAll(t => t.Dices.Count == 0);
 
             //} while (Players.Count > 1);
-        }
+        //}
 
         //private void ProcessResult(IDiceResult result)
         //{

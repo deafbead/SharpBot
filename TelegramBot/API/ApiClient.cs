@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,9 +17,12 @@ namespace TelegramBot.API
 
         private readonly IRestClient _client;
 
+        public string Token { get; set; }
+
         public ApiClient(string token)
         {
             _client = new RestClient(BaseApiAddress + token);
+            Token = token;
         }
 
         public Task<TResult> SendRequestAsync<TResult>(string method, object obj = null)
@@ -64,9 +69,16 @@ namespace TelegramBot.API
             return Post<TResult>(restRequest);
         }
 
-        private async Task<TResult> Post<TResult>(IRestRequest request)
+        public async Task<TResult> Post<TResult>(IRestRequest request)
         {
             var response = await _client.ExecutePostTaskAsync(request);
+            var result = JsonConvert.DeserializeObject<TResult>(response.Content);
+            return result;
+        }
+
+        public async Task<TResult> Get<TResult>(IRestRequest request)
+        {
+            var response = await _client.ExecuteGetTaskAsync(request);
             var result = JsonConvert.DeserializeObject<TResult>(response.Content);
             return result;
         }

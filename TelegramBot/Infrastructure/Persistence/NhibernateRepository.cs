@@ -6,11 +6,11 @@ namespace TelegramBot.Persistence
 {
     class NHibernateRepository<TDTO> : IRepository<TDTO> where TDTO : class
     {
-        private readonly ISession _session;
+        private readonly ISessionFactory _sessionFactory;
 
-        public NHibernateRepository(ISession session)
+        public NHibernateRepository(ISessionFactory sessionFactory)
         {
-            _session = session;
+            _sessionFactory = sessionFactory;
         }
 
         public void Add(TDTO item)
@@ -20,12 +20,18 @@ namespace TelegramBot.Persistence
 
         public TDTO Get(int id)
         {
-            return _session.Get<TDTO>(id);
+            using (var session = _sessionFactory.OpenSession())
+            {
+                return session.Get<TDTO>(id);
+            }
         }
 
         public IList<TDTO> GetAll()
         {
-            return _session.QueryOver<TDTO>().List();
+            using (var session = _sessionFactory.OpenSession())
+            {
+                return session.QueryOver<TDTO>().List();
+            }
         }
 
         public void Update(TDTO item)
@@ -35,15 +41,28 @@ namespace TelegramBot.Persistence
 
         public void Delete(TDTO item)
         {
-            _session.Delete(item);
+            using (var session = _sessionFactory.OpenSession())
+            {
+                session.Delete(item);
+            }
         }
 
         private void InTransaction(Action<ISession> action)
         {
-            using (var transaction = _session.BeginTransaction())
+            using (var session = _sessionFactory.OpenSession())
+            using (var transaction = session.BeginTransaction())
             {
-                action(_session);
-                transaction.Commit();
+                try
+                {
+                    action(session);
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction?.Rollback();
+                    throw;
+                }
+               
             }
         }
     }

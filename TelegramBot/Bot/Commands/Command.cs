@@ -20,7 +20,7 @@ namespace TelegramBot.Bot.Commands
 
         public async Task<IEnumerable<IReply>> Invoke(TelegramMessageEventArgs input)
         {
-            if (ThrottleFilter != null && !ThrottleFilter.CanExecute())
+            if (ThrottleFilter != null && !ThrottleFilter.CanExecute() && ThrottleFilter.Frequency != null)
             {
                 TimeSpan remainingTime = ThrottleFilter.Frequency.Value - (DateTime.Now - ThrottleFilter.LastExecution);
                 return input.TextReply(GetOverThrottleText(remainingTime)).Yield();
@@ -32,10 +32,6 @@ namespace TelegramBot.Bot.Commands
         }
 
         protected abstract Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input);
-
-
-
-     
 
         protected static IEnumerable<IReply> Nothing => Enumerable.Empty<IReply>();
 

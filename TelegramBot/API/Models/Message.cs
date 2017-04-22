@@ -67,7 +67,7 @@ namespace TelegramBot.API.Models
         /// Optional.For text messages, the actual UTF-8 text of the message, 0-4096 characters.
         /// </summary>
         [JsonProperty("text")]
-        internal string Text { get; set; }
+        public string Text { get; set; }
 
         /// <summary>
         /// Optional. For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text

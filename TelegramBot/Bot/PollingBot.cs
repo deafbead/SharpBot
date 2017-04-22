@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 using TelegramBot.API;
 using TelegramBot.API.Models;
-using TelegramBot.Bot.Args;
 using TelegramBot.Bot.ChatProcessors;
-using TelegramBot.Bot.Commands;
-using TelegramBot.Bot.Replies;
+using TelegramBot.Bot.Extensions;
 using TelegramBot.Bot.Updates;
 using TelegramBot.Logging;
 
 namespace TelegramBot.Bot
 {
-    public class BotImpl : IBot
+    class PollingBot : AbstractBot, IPollingBot
     {
-        private readonly IUpdatesProvider _updatesProvider;
+        private readonly IPollingUpdatesProvider _updatesProvider;
         private readonly IChatProcessorFactory _chatProcessorFactory;
 
-        [Inject]
-        public ILogger Logger { get; set; }
-
-        public BotImpl(IUpdatesProvider updatesProvider, IChatProcessorFactory chatProcessorFactory)
+        public PollingBot(IPollingUpdatesProvider updatesProvider, IChatProcessorFactory chatProcessorFactory, ApiClient client) : base(client)
         {
             _updatesProvider = updatesProvider;
             _chatProcessorFactory = chatProcessorFactory;
@@ -44,33 +41,21 @@ namespace TelegramBot.Bot
         {
             Logger?.Log(LogLevel.Message, "Бот запущен.");
             await SkipUpdatesToEnd();
-
             while (IsRunning)
             {
                 await Task.Delay(1000);
-
                 try
                 {
                     var updates = await _updatesProvider.GetUpdates();
-
                     foreach (var update in updates)
                     {
-                        if (update.Message == null) continue;
-
-                        var processors = _chatProcessorFactory.GetProcessors(update.Message.Chat.Id);
-                        foreach (var processor in processors)
-                        {
-                            await processor.ProcessUpdate(update);
-                        }
-
-                        //await ProcessMessage(update.Message);
+                        await _chatProcessorFactory.ProcessUpdate(update);
                     }
                 }
                 catch (Exception ex)
                 {
                     ProcessException(ex);
                 }
-              
             }
         }
 
@@ -82,14 +67,5 @@ namespace TelegramBot.Bot
                 updates = await _updatesProvider.GetUpdates();
             } while (updates.Count > 0);
         }
-
-      
-        
-        private void ProcessException(Exception ex)
-        {
-            //   IsRunning = false;
-            Logger?.Log(LogLevel.Fatal, ex.Message);
-        }
-
     }
 }

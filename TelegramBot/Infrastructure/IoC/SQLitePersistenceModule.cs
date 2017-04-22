@@ -1,16 +1,25 @@
-﻿using System.IO;
+﻿using System.Configuration;
+using System.IO;
 using System.Reflection;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
-using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using Ninject.Modules;
+using TelegramBot.Persistence;
+using Configuration = NHibernate.Cfg.Configuration;
 
-namespace TelegramBot.Persistence
+namespace TelegramBot.IoC
 {
-    static class NHibernateConfiguration
+    public class SQLitePersistenceModule : NinjectModule
     {
-        public static ISessionFactory GetSessionFactory(string path, bool overwrite)
+        public override void Load()
+        {
+            Bind<ISessionFactory>()
+                .ToConstant(GetSessionFactory(ConfigurationManager.AppSettings["persistence"], false));
+        }
+
+        private static ISessionFactory GetSessionFactory(string path, bool overwrite)
         {
             return Fluently.Configure()
                 .Database(
@@ -34,6 +43,6 @@ namespace TelegramBot.Persistence
 
             new SchemaExport(config).Create(false, true);
         }
-    }
 
+    }
 }

@@ -23,11 +23,11 @@ using TelegramBot.Util;
 
 namespace TelegramBot.IoC
 {
-    class IoCBindings : NinjectModule
+    public class IoCBindings : NinjectModule
     {
         public override void Load()
         {
-            Bind<BotImpl>().ToSelf();
+            Bind<WebHookBot>().ToSelf();
             Bind<ApiClient>().ToConstant(new ApiClient(ConfigurationManager.AppSettings["token"]));
             Bind<ICommandInvoker>().To<ReflectionCommandInvoker>().Named("common");
 
@@ -36,20 +36,19 @@ namespace TelegramBot.IoC
                 .Named("personal")
                 .WithConstructorArgument(typeof(Type), typeof(PersonalCommandAttribute));
 
-            Bind<IUpdatesProvider>().To<UpdatesProvider>();
+            Bind<IPollingUpdatesProvider>().To<PollingUpdatesProvider>();
             Bind<IReplySender>().To<ReplySender>();
             Bind<ILogger>().To<ConsoleLogger>();
-            Bind<IBot>().To<BotImpl>();
+            Bind<IWebHookBot>().To<WebHookBot>();
+            Bind<IPollingBot>().To<PollingBot>();
             Bind<IThrottleFilter>().To<ThrottleFilter>();
             Bind(typeof(IRepository<>)).To(typeof(NHibernateRepository<>));
             Bind<IRecordsTable>().To<RecordsTable>();
             Bind<IQuizRanksProvider>().To<QuizRanksProvider>();
             Bind<IChatProcessor>().To<ChatProcessor>();
-            Bind<ISession>()
-                .ToConstant(
-                    NHibernateConfiguration.GetSessionFactory(ConfigurationManager.AppSettings["persistence"], false).OpenSession());
-
+            
             Bind<IChatProcessorFactory>().ToConstant(ChatProcessorFactoryBuilder.Create().ConfigureChat(ConfigureChats).BuildFactory());
+            Bind<IPersistanceManager>().To<PersistanceManager>();
         }
 
         private void ConfigureChats(ChatConfiguration cfg)
