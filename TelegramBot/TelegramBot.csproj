@@ -122,6 +122,7 @@
     <Compile Include="Bot\ChatProcessors\ChatProcessor.cs" />
     <Compile Include="Bot\ChatProcessors\ChatProcessorFactory.cs" />
     <Compile Include="Bot\ChatProcessors\ChatProcessorFactoryBuilder.cs" />
+    <Compile Include="Bot\ChatProcessors\CommonChat.cs" />
     <Compile Include="Bot\ChatProcessors\IChatConfiguration.cs" />
     <Compile Include="Bot\ChatProcessors\IChatProcessor.cs" />
     <Compile Include="Bot\ChatProcessors\IChatProcessorFactory.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Bot\Commands\Impl\Quiz\Ranks\QuizRanksProvider.cs" />
     <Compile Include="Bot\Commands\Impl\Quiz\States\QuizBeginGameState.cs" />
     <Compile Include="Bot\Commands\Impl\Quiz\States\QuizMidGameState.cs" />
+    <Compile Include="Bot\Commands\Impl\SayCommand.cs" />
     <Compile Include="Bot\Commands\Impl\SosachCommand.cs" />
     <Compile Include="Bot\Commands\Impl\UptimeCommand.cs" />
     <Compile Include="Bot\Commands\Impl\WolframCommand.cs" />

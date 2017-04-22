@@ -53,7 +53,7 @@ namespace TelegramBot.IoC
 
         private void ConfigureChats(ChatConfiguration cfg)
         {
-            long commonChatId = Convert.ToInt64(ConfigurationManager.AppSettings["commonChatId"]);
+            long commonChatId = CommonChat.ChatId;/*Convert.ToInt64(ConfigurationManager.AppSettings["commonChatId"]);*/
 
             var commonProcessor = new ChatProcessor(Kernel.Get<ICommandInvoker>("common"), Kernel.Get<IReplySender>());
             cfg.BindProcessor(commonProcessor).ToChats(commonChatId);
