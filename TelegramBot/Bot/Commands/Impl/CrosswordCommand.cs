@@ -29,6 +29,10 @@ namespace TelegramBot.Bot.Commands
 
         protected override Task<IEnumerable<IReply>> OnInvoke(TelegramMessageEventArgs input)
         {
+            if (input.MessageEquals("/cw reset"))
+            {
+                _words.Clear();    
+            }
             if (input.MessageEquals("/cw"))
             {
                 if (DateTime.Now - LastCW > Interval)
@@ -61,7 +65,7 @@ namespace TelegramBot.Bot.Commands
 
         private char[][] CreateGrid(int sizeX, int sizeY)
         {
-            var words = _words.Where(w => w.Length < sizeX || w.Length < sizeY).Select(t => t.ToUpperInvariant()).ToList();
+            var words = _words.Where(w => w.Length > 1 && (w.Length < sizeX || w.Length < sizeY)).Select(t => t.ToUpperInvariant()).ToList();
 
             return Enumerable.Range(1, 10)
                 .Select(i =>
@@ -75,7 +79,7 @@ namespace TelegramBot.Bot.Commands
                         Count = count
                     };
                 })
-                .OrderByDescending(t => t.Count)
+                .OrderBy(t => t.Count)
                 .FirstOrDefault()
                 ?.Grid;
         }
