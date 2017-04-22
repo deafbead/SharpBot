@@ -4,13 +4,14 @@ using NHibernate;
 
 namespace TelegramBot.Persistence
 {
-    class NHibernateRepository<TDTO> : IRepository<TDTO> where TDTO : class
+    class NHibernateRepository<TDTO> : IRepository<TDTO>, IDisposable where TDTO : class
     {
         private readonly ISessionFactory _sessionFactory;
-
+        private ISession _session;
         public NHibernateRepository(ISessionFactory sessionFactory)
         {
             _sessionFactory = sessionFactory;
+            _session = _sessionFactory.OpenSession();
         }
 
         public void Add(TDTO item)
@@ -20,18 +21,14 @@ namespace TelegramBot.Persistence
 
         public TDTO Get(int id)
         {
-            using (var session = _sessionFactory.OpenSession())
-            {
-                return session.Get<TDTO>(id);
-            }
+
+            return _session.Get<TDTO>(id);
+
         }
 
         public IList<TDTO> GetAll()
         {
-            using (var session = _sessionFactory.OpenSession())
-            {
-                return session.QueryOver<TDTO>().List();
-            }
+            return _session.QueryOver<TDTO>().List();
         }
 
         public void Update(TDTO item)
@@ -41,20 +38,18 @@ namespace TelegramBot.Persistence
 
         public void Delete(TDTO item)
         {
-            using (var session = _sessionFactory.OpenSession())
-            {
-                session.Delete(item);
-            }
+
+            _session.Delete(item);
+
         }
 
         private void InTransaction(Action<ISession> action)
         {
-            using (var session = _sessionFactory.OpenSession())
-            using (var transaction = session.BeginTransaction())
+            using (var transaction = _session.BeginTransaction())
             {
                 try
                 {
-                    action(session);
+                    action(_session);
                     transaction.Commit();
                 }
                 catch
@@ -62,8 +57,13 @@ namespace TelegramBot.Persistence
                     transaction?.Rollback();
                     throw;
                 }
-               
+
             }
+        }
+
+        public void Dispose()
+        {
+            _session?.Dispose();
         }
     }
 }

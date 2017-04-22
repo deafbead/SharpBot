@@ -129,6 +129,7 @@
     <Compile Include="Bot\Commands\Attributes\CommandAttribute.cs" />
     <Compile Include="Bot\Commands\Attributes\PersonalCommandAttribute.cs" />
     <Compile Include="Bot\Commands\Impl\AnekdotCommand.cs" />
+    <Compile Include="Bot\Commands\Impl\CrosswordCommand.cs" />
     <Compile Include="Bot\Commands\Impl\Dice\DiceBeginGameState.cs" />
     <Compile Include="Bot\Commands\Impl\Dice\DiceBet.cs" />
     <Compile Include="Bot\Commands\Impl\Dice\DiceGame.cs" />
@@ -224,9 +225,11 @@
     <Compile Include="Bot\Types\ChatActionToSend.cs" />
     <Compile Include="API\Models\ApiResponse.cs" />
     <Compile Include="Util\ApiExtensions.cs" />
+    <Compile Include="Util\Collections\FixedSizeQueue.cs" />
     <Compile Include="Util\EnumerableExtensions.cs" />
     <Compile Include="Util\EqualityComparerFactory.cs" />
     <Compile Include="Bot\Games\Score\RecordsTable.cs" />
+    <Compile Include="Util\ImageExtensions.cs" />
     <Compile Include="Util\StringExtensions.cs" />
     <Compile Include="Util\TasksExtensions.cs" />
     <Compile Include="Util\ThrottleFilter.cs" />
